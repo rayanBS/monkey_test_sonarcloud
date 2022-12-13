@@ -1,6 +1,5 @@
 name: SonarCloud
 on:
-  workflow_dispatch:
   push:
     branches:
       - master
@@ -20,10 +19,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-c-cpp@v1
       - name: Run build-wrapper
         run: |
-          mkdir build
-          cd build
-          echo "CC = $CC, CXX = $CXX"
-          cmake -DMK_DEBUG=On -DMK_WITHOUT_BIN=On -DMK_WITHOUT_CONF=On -DMK_LIB_ONLY=On ../
+          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
